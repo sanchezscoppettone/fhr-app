@@ -1187,7 +1187,7 @@
 
       <div class="form-group">
         <label class="form-label">Airline cliente</label>
-        <select class="form-input form-select">
+        <select class="form-input form-select" id="form-airline">
           <option>Etihad Airways (ETD)</option>
           <option>LATAM Airlines (LAN)</option>
           <option>Saudi Arabian (SVA)</option>
@@ -1198,17 +1198,17 @@
 
       <div class="form-group">
         <label class="form-label">Flight Nº</label>
-        <input class="form-input" type="text" placeholder="ej. ETD083" value="ETD083" style="text-transform:uppercase">
+        <input class="form-input" type="text" placeholder="ej. ETD083" value="ETD083" style="text-transform:uppercase" id="form-vuelo">
       </div>
 
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">Origen (IATA)</label>
-          <input class="form-input" type="text" placeholder="AUH" value="AUH" maxlength="3" style="text-transform:uppercase">
+          <input class="form-input" type="text" placeholder="AUH" value="AUH" maxlength="3" style="text-transform:uppercase" id="form-origen">
         </div>
         <div class="form-group">
           <label class="form-label">Destino (IATA)</label>
-          <input class="form-input" type="text" placeholder="FCO" value="FCO" maxlength="3" style="text-transform:uppercase">
+          <input class="form-input" type="text" placeholder="FCO" value="FCO" maxlength="3" style="text-transform:uppercase" id="form-destino">
         </div>
       </div>
 
@@ -1225,7 +1225,7 @@
 
       <div class="form-group">
         <label class="form-label">Matrícula</label>
-        <select class="form-input form-select">
+        <select class="form-input form-select" id="form-matricula">
           <option>EC-NBN · A332</option>
           <option>EC-ODP · A332</option>
           <option>EC-MAJ · A332</option>
@@ -1249,7 +1249,7 @@
         </div>
         <div class="form-group">
           <label class="form-label">Dispatcher</label>
-          <select class="form-input form-select">
+          <select class="form-input form-select" id="form-dispatcher">
             <option>Sergio</option>
             <option>Alberto</option>
             <option>Adrián T</option>
@@ -2372,9 +2372,83 @@
   }
 
   // ── SEND FHR ──
+  const WEBHOOK_URL = 'https://default1316018c4b204b989d6021bda19c74.40.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/2ef39d2d9c57441aa31d2e20e007f657/triggers/manual/paths/invoke?api-version=1';
+
+  function getProcTime(procId) {
+    const el = document.getElementById(procId);
+    if (!el) return '';
+    const t = el.querySelector('.process-times');
+    return t ? t.textContent.trim() : '';
+  }
+
   function sendFHR() {
-    showToast('✈ FHR enviado · HCC notificado · ' + getUTCTime() + 'z');
-    setTimeout(() => goTo('screen-home'), 1400);
+    const btn = document.getElementById('btn-send');
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Enviando…'; }
+
+    const reportEl = document.getElementById('report-content');
+    const reportHTML = reportEl ? reportEl.innerHTML : '';
+
+    const payload = {
+      vuelo:               (document.getElementById('form-vuelo')?.value || 'ETD083').toUpperCase(),
+      matricula:           (document.getElementById('form-matricula')?.value || 'EC-NBN').split('·')[0].trim(),
+      aerolinea:           document.getElementById('form-airline')?.value || 'Etihad Airways (ETD)',
+      origen:              (document.getElementById('form-origen')?.value || 'AUH').toUpperCase(),
+      destino:             (document.getElementById('form-destino')?.value || 'FCO').toUpperCase(),
+      pic:                 document.getElementById('field-pic')?.value || '',
+      sobrecargo:          document.getElementById('field-purser')?.value || '',
+      dispatcher:          document.getElementById('form-dispatcher')?.value || 'Sergio',
+      fecha:               new Date().toISOString(),
+      horaLlegada:         getProcTime('proc-disem'),
+      horaPartida:         getProcTime('proc-load'),
+      disembarkationFin:   document.getElementById('disem-times')?.textContent || '',
+      offloadingFin:       document.getElementById('offload-times')?.textContent || '',
+      crewArrivalInicio:   getProcTime('proc-crew'),
+      crewArrivalFin:      getProcTime('proc-crew'),
+      crewOnBoardInicio:   getProcTime('proc-crewob'),
+      crewOnBoardFin:      getProcTime('proc-crewob'),
+      cleaningInicio:      getProcTime('proc-clean'),
+      cleaningFin:         getProcTime('proc-clean'),
+      fuellingInicio:      getProcTime('proc-fuel'),
+      fuellingFin:         getProcTime('proc-fuel'),
+      cateringInicio:      getProcTime('proc-cater'),
+      cateringFin:         getProcTime('proc-cater'),
+      boardingPreboard:    document.getElementById('preboard-yes')?.classList.contains('active') ? 'SI' : 'NO',
+      boardingOkTime:      document.getElementById('board-ok-time')?.value || '',
+      boardingInicio:      getProcTime('proc-board'),
+      boardingFin:         getProcTime('proc-board'),
+      loadingInicio:       getProcTime('proc-load'),
+      loadingFin:          getProcTime('proc-load'),
+      lirEmitida:          document.getElementById('lir-emitida')?.value || '',
+      lirFirmada:          document.getElementById('lir-firmada')?.value || '',
+      loadsheetEmitida:    document.getElementById('ls-emitida')?.value || '',
+      loadsheetFirmada:    document.getElementById('ls-firmada')?.value || '',
+      aguasPotables:       getProcTime('proc-water') ? 'SI' : 'NO',
+      aguasLitros:         document.getElementById('water-liters')?.value || '',
+      safetyNOK:           safetyNOK.join(', '),
+      notas:               Object.entries(notes).map(([k,v]) => k + ': ' + v).join(' | '),
+      offloads:            offloads.map(o => [o.uld, o.weight+'kg', o.reason].filter(Boolean).join(' / ')).join(' · '),
+      reportHTML:          reportHTML,
+      estado:              'CERRADO'
+    };
+
+    fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(r => {
+      if (r.ok || r.status === 202) {
+        showToast('✅ FHR guardado en SharePoint · ' + getUTCTime() + 'z');
+        setTimeout(() => goTo('screen-home'), 1800);
+      } else {
+        throw new Error('HTTP ' + r.status);
+      }
+    })
+    .catch(err => {
+      console.error('sendFHR error:', err);
+      showToast('⚠️ Error al enviar — intenta de nuevo');
+      if (btn) { btn.disabled = false; btn.textContent = '✈ Enviar FHR'; }
+    });
   }
 </script>
 
