@@ -1198,28 +1198,28 @@
 
       <div class="form-group">
         <label class="form-label">Flight Nº</label>
-        <input class="form-input" type="text" placeholder="ej. ETD083" value="ETD083" style="text-transform:uppercase" id="form-vuelo">
+        <input class="form-input" type="text" placeholder="ej. ETD083" style="text-transform:uppercase" id="form-vuelo">
       </div>
 
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">Origen (IATA)</label>
-          <input class="form-input" type="text" placeholder="AUH" value="AUH" maxlength="3" style="text-transform:uppercase" id="form-origen">
+          <input class="form-input" type="text" placeholder="AUH" maxlength="3" style="text-transform:uppercase" id="form-origen">
         </div>
         <div class="form-group">
           <label class="form-label">Destino (IATA)</label>
-          <input class="form-input" type="text" placeholder="FCO" value="FCO" maxlength="3" style="text-transform:uppercase" id="form-destino">
+          <input class="form-input" type="text" placeholder="FCO" maxlength="3" style="text-transform:uppercase" id="form-destino">
         </div>
       </div>
 
       <div class="form-row">
         <div class="form-group">
-          <label class="form-label">STA (UTC)</label>
-          <input class="form-input" type="text" placeholder="10:00" value="10:00">
+          <label class="form-label">STD (UTC)</label>
+          <input class="form-input" type="text" placeholder="00:00" id="form-std">
         </div>
         <div class="form-group">
-          <label class="form-label">STD (UTC)</label>
-          <input class="form-input" type="text" placeholder="17:00" value="17:00">
+          <label class="form-label">STA (UTC)</label>
+          <input class="form-input" type="text" placeholder="00:00" id="form-sta">
         </div>
       </div>
 
@@ -1291,18 +1291,2474 @@
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">Recogida hotel (UTC)</label>
-          <input class="form-input" type="text" placeholder="07:30" value="07:30">
+          <input class="form-input" type="text" placeholder="07:30">
         </div>
         <div class="form-group">
           <label class="form-label">Llegada terminal (UTC)</label>
-          <input class="form-input" type="text" placeholder="08:15" value="08:15">
+          <input class="form-input" type="text" placeholder="08:15">
         </div>
       </div>
 
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">Nº Tripulantes</label>
-          <input class="form-input" type="number" placeholder="6" value="6">
+          <input class="form-input" type="number" placeholder="6">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Vehículo / Matrícula</label>
+          <input class="form-input" type="text" placeholder="Bus-04">
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="goTo('screen-escala')">
+        Iniciar escala →
+      </button>
+      <button class="btn-secondary" onclick="goTo('screen-home')">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- ═══════════ SCREEN: ESCALA ACTIVA ═══════════ -->
+  <div class="screen" id="screen-escala">
+    <div class="top-nav">
+      <div class="nav-back" onclick="goTo('screen-home')">←</div>
+      <div class="nav-title">
+        <div class="nav-title-main">ETD 083 · AUH → FCO</div>
+        <div class="nav-title-sub">EC-NBN · A332 · Stand B22</div>
+      </div>
+      <div class="nav-badge badge-live">● VIVO</div>
+    </div>
+
+    <div class="escala-header">
+      <div class="escala-flight-row">
+        <div>
+          <div style="font-size:12px; color: var(--slate);">En tierra desde</div>
+          <div style="font-family: var(--mono); font-size:14px; font-weight:600; color:var(--text);">10:08z · AA 10:09z</div>
+        </div>
+        <div>
+          <div class="timer-display" id="timer">01:14:32</div>
+          <div class="timer-label">tiempo en tierra</div>
+        </div>
+      </div>
+      <div class="escala-progress-bar">
+        <div class="escala-progress-fill"></div>
+      </div>
+    </div>
+
+    <div class="scroll-area">
+
+      <div class="section-label">Llegada / Desembarque</div>
+
+      <!-- DISEMBARKATION — end-only -->
+      <div class="process-item endonly" id="proc-disem">
+        <div class="process-main">
+          <div class="process-icon-wrap">🚪</div>
+          <div class="process-info">
+            <div class="process-name">Disembarkation</div>
+            <div class="process-times" id="disem-times">Pendiente fin</div>
+          </div>
+          <div class="process-actions">
+            <button class="btn-note" id="note-btn-proc-disem" onclick="toggleNote('proc-disem')">📝</button>
+            <button class="btn-end-only" onclick="endOnlyProcess('proc-disem', this)">FIN</button>
+          </div>
+        </div>
+        <div class="note-area" id="note-proc-disem">
+          <textarea class="note-textarea" placeholder="Incidencia o nota sobre Disembarkation..." onchange="saveNote('proc-disem', this.value)" oninput="saveNote('proc-disem', this.value)"></textarea>
+        </div>
+      </div>
+
+      <!-- OFFLOADING — end-only -->
+      <div class="process-item endonly" id="proc-offload">
+        <div class="process-main">
+          <div class="process-icon-wrap">📤</div>
+          <div class="process-info">
+            <div class="process-name">Offloading</div>
+            <div class="process-times" id="offload-times">Pendiente fin</div>
+          </div>
+          <div class="process-actions">
+            <button class="btn-note" id="note-btn-proc-offload" onclick="toggleNote('proc-offload')">📝</button>
+            <button class="btn-end-only" onclick="endOnlyProcess('proc-offload', this)">FIN</button>
+          </div>
+        </div>
+        <div class="note-area" id="note-proc-offload">
+          <textarea class="note-textarea" placeholder="Incidencia o nota sobre Offloading..." onchange="saveNote('proc-offload', this.value)" oninput="saveNote('proc-offload', this.value)"></textarea>
+        </div>
+      </div>
+
+      <div class="section-label" style="margin-top:16px;">Tripulación</div>
+
+      <div class="process-item done" id="proc-crew">
+        <div class="process-main">
+          <div class="process-icon-wrap">🧑‍✈️</div>
+          <div class="process-info">
+            <div class="process-name">Crew Arrival</div>
+            <div class="process-times">Llegó 08:51z</div>
+          </div>
+          <div class="process-actions">
+            <button class="btn-note" id="note-btn-proc-crew" onclick="toggleNote('proc-crew')">📝</button>
+            <div class="process-check">✓</div>
+          </div>
+        </div>
+        <div class="note-area" id="note-proc-crew">
+          <textarea class="note-textarea" placeholder="Incidencia o nota sobre Crew Arrival..." onchange="saveNote('proc-crew', this.value)" oninput="saveNote('proc-crew', this.value)"></textarea>
+        </div>
+      </div>
+
+      <div class="process-item done" id="proc-crewob">
+        <div class="process-main">
+          <div class="process-icon-wrap">✈</div>
+          <div class="process-info">
+            <div class="process-name">Crew On Board</div>
+            <div class="process-times">08:45z</div>
+          </div>
+          <div class="process-actions">
+            <button class="btn-note" id="note-btn-proc-crewob" onclick="toggleNote('proc-crewob')">📝</button>
+            <div class="process-check">✓</div>
+          </div>
+        </div>
+        <div class="note-area" id="note-proc-crewob">
+          <textarea class="note-textarea" placeholder="Incidencia o nota sobre Crew On Board..." onchange="saveNote('proc-crewob', this.value)" oninput="saveNote('proc-crewob', this.value)"></textarea>
+        </div>
+      </div>
+
+      <div class="section-label" style="margin-top:16px;">Servicios de escala</div>
+
+      <div class="process-item done" id="proc-clean">
+        <div class="process-main">
+          <div class="process-icon-wrap">🧹</div>
+          <div class="process-info">
+            <div class="process-name">Cleaning</div>
+            <div class="process-times">08:00z → 09:00z · Iberia MRO</div>
+          </div>
+          <div class="process-actions">
+            <button class="btn-note" id="note-btn-proc-clean" onclick="toggleNote('proc-clean')">📝</button>
+            <div class="process-check">✓</div>
+          </div>
+        </div>
+        <div class="note-area" id="note-proc-clean">
+          <textarea class="note-textarea" placeholder="Incidencia o nota sobre Cleaning..." onchange="saveNote('proc-clean', this.value)" oninput="saveNote('proc-clean', this.value)"></textarea>
+        </div>
+      </div>
+
+      <div class="process-item running" id="proc-fuel">
+        <div class="process-main">
+          <div class="process-icon-wrap">⛽</div>
+          <div class="process-info">
+            <div class="process-name">Fuelling</div>
+            <div class="process-times">08:43z → en curso · Shell AUH</div>
+          </div>
+          <div class="process-actions">
+            <button class="btn-note" id="note-btn-proc-fuel" onclick="toggleNote('proc-fuel')">📝</button>
+            <button class="btn-stop" onclick="stopProcess('proc-fuel', this)">FIN</button>
+          </div>
+        </div>
+        <div class="note-area" id="note-proc-fuel">
+          <textarea class="note-textarea" placeholder="Incidencia o nota sobre Fuelling..." onchange="saveNote('proc-fuel', this.value)" oninput="saveNote('proc-fuel', this.value)"></textarea>
+        </div>
+      </div>
+
+      <div class="process-item running" id="proc-cater">
+        <div class="process-main">
+          <div class="process-icon-wrap">🍽</div>
+          <div class="process-info">
+            <div class="process-name">Catering</div>
+            <div class="process-times">07:55z → en curso · DNATA</div>
+          </div>
+          <div class="process-actions">
+            <button class="btn-note" id="note-btn-proc-cater" onclick="toggleNote('proc-cater')">📝</button>
+            <button class="btn-stop" onclick="stopProcess('proc-cater', this)">FIN</button>
+          </div>
+        </div>
+        <div class="note-area" id="note-proc-cater">
+          <textarea class="note-textarea" placeholder="Incidencia o nota sobre Catering..." onchange="saveNote('proc-cater', this.value)" oninput="saveNote('proc-cater', this.value)"></textarea>
+        </div>
+      </div>
+
+      <!-- AGUAS POTABLES — special block -->
+      <div class="process-item pending" id="proc-water">
+        <div class="process-main">
+          <div class="process-icon-wrap">💧</div>
+          <div class="process-info">
+            <div class="process-name">Aguas Potables</div>
+            <div class="process-times" id="water-times">Pendiente confirmación</div>
+          </div>
+          <div class="process-actions">
+            <button class="btn-note" id="note-btn-proc-water" onclick="toggleNote('proc-water')">📝</button>
+          </div>
+        </div>
+        <div class="water-block" id="water-block">
+          <div class="water-row">
+            <div class="water-label">¿Realizado?</div>
+            <div class="water-toggle">
+              <button class="water-btn yes" onclick="setWater('yes', this)">SÍ</button>
+              <button class="water-btn no" onclick="setWater('no', this)">NO</button>
+            </div>
+          </div>
+          <div id="water-detail" style="display:none;">
+            <div class="water-level">
+              <button class="level-btn" onclick="setLevel('50%', this)">50%</button>
+              <button class="level-btn" onclick="setLevel('75%', this)">75%</button>
+              <button class="level-btn active" onclick="setLevel('100%', this)">100%</button>
+            </div>
+            <div class="water-liters-row">
+              <input class="water-liters-input" type="number" placeholder="—" id="water-liters">
+              <span style="font-size:13px; color:var(--slate);">litros reales</span>
+            </div>
+          </div>
+        </div>
+        <div class="note-area" id="note-proc-water">
+          <textarea class="note-textarea" placeholder="Incidencia o nota sobre Aguas Potables..." onchange="saveNote('proc-water', this.value)" oninput="saveNote('proc-water', this.value)"></textarea>
+        </div>
+      </div>
+
+      <div class="process-item pending" id="proc-board">
+        <div class="process-main">
+          <div class="process-icon-wrap">🚶</div>
+          <div class="process-info">
+            <div class="process-name">Boarding</div>
+            <div class="process-times">Pendiente</div>
+          </div>
+          <div class="process-actions">
+            <button class="btn-note" id="note-btn-proc-board" onclick="toggleNote('proc-board')">📝</button>
+            <button class="btn-start" onclick="startProcess('proc-board', this)">INICIO</button>
+          </div>
+        </div>
+        <!-- Boarding detail block -->
+        <div class="water-block" id="board-detail" style="padding-top:12px;">
+          <div class="water-row" style="align-items:center; gap:12px; flex-wrap:wrap;">
+            <div class="water-label">Pre-boarding</div>
+            <div class="water-toggle">
+              <button class="water-btn yes" id="preboard-yes" onclick="setPreboard('yes')">SÍ</button>
+              <button class="water-btn no" id="preboard-no" onclick="setPreboard('no')">NO</button>
+            </div>
+          </div>
+          <div style="margin-top:10px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+            <div class="water-label" style="flex-shrink:0;">OK Boarding (hora)</div>
+            <input class="form-input" type="text" placeholder="ej. 14:45" id="board-ok-time"
+              style="width:110px; padding:8px 12px; font-size:14px; font-family:var(--mono);"
+              oninput="updateBoardingTimes()">
+            <span style="font-size:11px; color:var(--slate);">UTC · dado por sobrecargo</span>
+          </div>
+        </div>
+        <div class="note-area" id="note-proc-board">
+          <textarea class="note-textarea" placeholder="Incidencia o nota sobre Boarding..." onchange="saveNote('proc-board', this.value)" oninput="saveNote('proc-board', this.value)"></textarea>
+        </div>
+      </div>
+
+      <div class="process-item pending" id="proc-load">
+        <div class="process-main">
+          <div class="process-icon-wrap">📦</div>
+          <div class="process-info">
+            <div class="process-name">Loading</div>
+            <div class="process-times">Pendiente</div>
+          </div>
+          <div class="process-actions">
+            <button class="btn-note" id="note-btn-proc-load" onclick="toggleNote('proc-load')">📝</button>
+            <button class="btn-start" onclick="startProcess('proc-load', this)">INICIO</button>
+          </div>
+        </div>
+        <!-- Loading detail block -->
+        <div class="water-block" id="load-detail" style="padding-top:12px;">
+
+          <!-- Cargo Manifest -->
+          <div style="margin-bottom:12px;">
+            <div style="font-size:11px; font-weight:700; color:var(--slate); letter-spacing:1px; text-transform:uppercase; margin-bottom:8px;">Cargo Manifest</div>
+            <button class="doc-camera-btn" id="manifest-btn" onclick="fakeManifest()"
+              style="width:100%; justify-content:center; padding:10px;">
+              📎 &nbsp;Subir manifest (PDF / Excel)
+            </button>
+            <div id="manifest-status" style="display:none; margin-top:6px; font-size:12px; color:var(--green); font-family:var(--mono);">
+              ✅ Manifest adjunto
+            </div>
+          </div>
+
+          <!-- Payload -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
+            <div class="num-field">
+              <div class="num-field-label">Payload estimado (kg)</div>
+              <input class="num-field-input" type="number" placeholder="—" id="payload-est">
+            </div>
+            <div class="num-field">
+              <div class="num-field-label">Payload final (kg)</div>
+              <input class="num-field-input" type="number" placeholder="—" id="payload-final">
+            </div>
+          </div>
+
+          <!-- Offloads -->
+          <div>
+            <div style="font-size:11px; font-weight:700; color:var(--slate); letter-spacing:1px; text-transform:uppercase; margin-bottom:8px;">Offloads</div>
+            <div id="offload-list"></div>
+            <button onclick="addOffload()"
+              style="width:100%; background:rgba(248,81,73,0.07); border:1px solid rgba(248,81,73,0.2); border-radius:8px; padding:9px; color:var(--red); font-size:13px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;">
+              + Añadir offload
+            </button>
+          </div>
+        </div>
+        <div class="note-area" id="note-proc-load">
+          <textarea class="note-textarea" placeholder="Incidencia o nota sobre Loading..." onchange="saveNote('proc-load', this.value)" oninput="saveNote('proc-load', this.value)"></textarea>
+        </div>
+      </div>
+
+      <div class="process-item pending" id="proc-lir">
+        <div class="process-main">
+          <div class="process-icon-wrap">📄</div>
+          <div class="process-info">
+            <div class="process-name">LIR</div>
+            <div class="process-times">Pendiente</div>
+          </div>
+          <div class="process-actions">
+            <button class="btn-note" id="note-btn-proc-lir" onclick="toggleNote('proc-lir')">📝</button>
+            <button class="btn-start" onclick="startProcess('proc-lir', this)">INICIO</button>
+          </div>
+        </div>
+        <div class="water-block" style="padding-top:12px;">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div>
+              <div style="font-size:10px; color:var(--slate); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:5px;">Hora emitida (UTC)</div>
+              <input class="form-input" type="text" placeholder="ej. 14:20" id="lir-emitida"
+                style="padding:8px 12px; font-size:14px; font-family:var(--mono);">
+            </div>
+            <div>
+              <div style="font-size:10px; color:var(--slate); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:5px;">Hora firmada (UTC)</div>
+              <input class="form-input" type="text" placeholder="ej. 14:35" id="lir-firmada"
+                style="padding:8px 12px; font-size:14px; font-family:var(--mono);">
+            </div>
+          </div>
+        </div>
+        <div class="note-area" id="note-proc-lir">
+          <textarea class="note-textarea" placeholder="Incidencia o nota sobre LIR..." onchange="saveNote('proc-lir', this.value)" oninput="saveNote('proc-lir', this.value)"></textarea>
+        </div>
+      </div>
+
+      <div class="process-item pending" id="proc-ls">
+        <div class="process-main">
+          <div class="process-icon-wrap">⚖</div>
+          <div class="process-info">
+            <div class="process-name">Loadsheet</div>
+            <div class="process-times">Pendiente</div>
+          </div>
+          <div class="process-actions">
+            <button class="btn-note" id="note-btn-proc-ls" onclick="toggleNote('proc-ls')">📝</button>
+            <button class="btn-start" onclick="startProcess('proc-ls', this)">INICIO</button>
+          </div>
+        </div>
+        <div class="water-block" style="padding-top:12px;">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div>
+              <div style="font-size:10px; color:var(--slate); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:5px;">Hora emitida (UTC)</div>
+              <input class="form-input" type="text" placeholder="ej. 14:40" id="ls-emitida"
+                style="padding:8px 12px; font-size:14px; font-family:var(--mono);">
+            </div>
+            <div>
+              <div style="font-size:10px; color:var(--slate); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:5px;">Hora firmada (UTC)</div>
+              <input class="form-input" type="text" placeholder="ej. 14:52" id="ls-firmada"
+                style="padding:8px 12px; font-size:14px; font-family:var(--mono);">
+            </div>
+          </div>
+        </div>
+        <div class="note-area" id="note-proc-ls">
+          <textarea class="note-textarea" placeholder="Incidencia o nota sobre Loadsheet..." onchange="saveNote('proc-ls', this.value)" oninput="saveNote('proc-ls', this.value)"></textarea>
+        </div>
+      </div>
+
+      <div style="margin-top: 16px; margin-bottom: 8px;" class="section-label">Acciones</div>
+
+      <button class="incident-btn" onclick="showToast('📷 Abriendo cámara...')">
+        ⚠️ Registrar incidencia general
+      </button>
+
+      <button class="close-fhr-btn" onclick="goTo('screen-close')">
+        Completar y cerrar FHR →
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ═══════════ SCREEN: CLOSE FHR ═══════════ -->
+  <div class="screen" id="screen-close">
+    <div class="top-nav">
+      <div class="nav-back" onclick="goTo('screen-escala')">←</div>
+      <div class="nav-title">
+        <div class="nav-title-main">Cerrar FHR</div>
+        <div class="nav-title-sub">ETD 083 · AUH → FCO</div>
+      </div>
+      <div class="nav-badge badge-closing">CIERRE</div>
+    </div>
+
+    <div class="scroll-area">
+
+      <!-- PASAJEROS -->
+      <div class="section-block">
+        <div class="section-block-header" onclick="toggleSection(this)">
+          <div class="section-block-title">
+            <div class="section-status-dot dot-complete"></div>
+            👥 Pasajeros
+          </div>
+          <div class="chevron">▼</div>
+        </div>
+        <div class="section-block-body">
+          <div class="num-grid">
+            <div class="num-field">
+              <div class="num-field-label">Total PAX</div>
+              <input class="num-field-input" type="number" value="268">
+            </div>
+            <div class="num-field">
+              <div class="num-field-label">Adultos</div>
+              <input class="num-field-input" type="number" value="253">
+            </div>
+            <div class="num-field">
+              <div class="num-field-label">Niños (2-11)</div>
+              <input class="num-field-input" type="number" value="12">
+            </div>
+            <div class="num-field">
+              <div class="num-field-label">Infantes</div>
+              <input class="num-field-input" type="number" value="3">
+            </div>
+            <div class="num-field">
+              <div class="num-field-label">No-shows</div>
+              <input class="num-field-input" type="number" value="2">
+            </div>
+            <div class="num-field">
+              <div class="num-field-label">WCHR/WCHC</div>
+              <input class="num-field-input" type="number" value="6">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMBUSTIBLE -->
+      <div class="section-block">
+        <div class="section-block-header" onclick="toggleSection(this)">
+          <div class="section-block-title">
+            <div class="section-status-dot dot-complete"></div>
+            ⛽ Combustible
+          </div>
+          <div class="chevron">▼</div>
+        </div>
+        <div class="section-block-body">
+          <div class="num-grid">
+            <div class="num-field">
+              <div class="num-field-label">Fuel OFP (kg)</div>
+              <input class="num-field-input" type="number" value="42800">
+            </div>
+            <div class="num-field">
+              <div class="num-field-label">Uplift real (kg)</div>
+              <input class="num-field-input" type="number" value="41200">
+            </div>
+          </div>
+          <div style="margin-top:10px" class="num-field">
+            <div class="num-field-label">Nº recibo suministrador</div>
+            <input class="num-field-input" type="text" value="AUH-2026-08847">
+          </div>
+          <div style="margin-top:10px;font-size:12px;color:var(--green);font-family:var(--mono);">
+            ▼ 1.600 kg vs OFP
+          </div>
+        </div>
+      </div>
+
+      <!-- RETRASOS -->
+      <div class="section-block">
+        <div class="section-block-header" onclick="toggleSection(this)">
+          <div class="section-block-title">
+            <div class="section-status-dot dot-incomplete"></div>
+            ⏱ Retrasos
+          </div>
+          <div class="chevron">▼</div>
+        </div>
+        <div class="section-block-body">
+          <div class="info-banner">
+            ℹ️ STD 17:00z · ATD 17:09z · <strong style="color:var(--amber)">+9 min</strong>
+          </div>
+          <div class="delay-row">
+            <div>
+              <div class="delay-code">91R</div>
+              <div class="delay-resp">Espera conexiones</div>
+            </div>
+            <div class="delay-time">+09 min</div>
+          </div>
+          <button style="width:100%; background:rgba(88,166,255,0.08); border:1px solid rgba(88,166,255,0.2); border-radius:8px; padding:10px; color:var(--blue); font-size:13px; font-weight:600; cursor:pointer; margin-top:6px;" onclick="showToast('+ Añadir código de retraso')">
+            + Añadir código
+          </button>
+        </div>
+      </div>
+
+      <!-- SAFETY ASPECTS -->
+      <div class="section-block">
+        <div class="section-block-header" onclick="toggleSection(this)">
+          <div class="section-block-title">
+            <div class="section-status-dot dot-required" id="safety-dot"></div>
+            🛡 Safety Aspects
+          </div>
+          <div class="chevron">▼</div>
+        </div>
+        <div class="section-block-body open">
+          <div style="font-size:11px;color:var(--amber);margin-bottom:12px;font-weight:600;">
+            ⚠ Respuesta obligatoria en todos los items
+          </div>
+
+          <div class="safety-row">
+            <div class="safety-label">FOD check</div>
+            <div class="safety-toggle">
+              <button class="toggle-btn ok active" onclick="toggleSafety(this,'ok')">OK</button>
+              <button class="toggle-btn nok" onclick="toggleSafety(this,'nok')">NOK</button>
+              <button class="toggle-btn na" onclick="toggleSafety(this,'na')">N/A</button>
+            </div>
+          </div>
+          <div class="safety-row">
+            <div class="safety-label">Chocks / Cones</div>
+            <div class="safety-toggle">
+              <button class="toggle-btn ok active" onclick="toggleSafety(this,'ok')">OK</button>
+              <button class="toggle-btn nok" onclick="toggleSafety(this,'nok')">NOK</button>
+              <button class="toggle-btn na" onclick="toggleSafety(this,'na')">N/A</button>
+            </div>
+          </div>
+          <div class="safety-row">
+            <div class="safety-label">GSE positioning</div>
+            <div class="safety-toggle">
+              <button class="toggle-btn ok" onclick="toggleSafety(this,'ok')">OK</button>
+              <button class="toggle-btn nok" onclick="toggleSafety(this,'nok')">NOK</button>
+              <button class="toggle-btn na active" onclick="toggleSafety(this,'na')">N/A</button>
+            </div>
+          </div>
+          <div class="safety-row">
+            <div class="safety-label">Hold / ULD check</div>
+            <div class="safety-toggle">
+              <button class="toggle-btn ok active" onclick="toggleSafety(this,'ok')">OK</button>
+              <button class="toggle-btn nok" onclick="toggleSafety(this,'nok')">NOK</button>
+              <button class="toggle-btn na" onclick="toggleSafety(this,'na')">N/A</button>
+            </div>
+          </div>
+          <div class="safety-row">
+            <div class="safety-label">DGR handling</div>
+            <div class="safety-toggle">
+              <button class="toggle-btn ok" onclick="toggleSafety(this,'ok')">OK</button>
+              <button class="toggle-btn nok" onclick="toggleSafety(this,'nok')">NOK</button>
+              <button class="toggle-btn na active" onclick="toggleSafety(this,'na')">N/A</button>
+            </div>
+          </div>
+          <div class="safety-row">
+            <div class="safety-label">Fuelling safety</div>
+            <div class="safety-toggle">
+              <button class="toggle-btn ok active" onclick="toggleSafety(this,'ok')">OK</button>
+              <button class="toggle-btn nok" onclick="toggleSafety(this,'nok')">NOK</button>
+              <button class="toggle-btn na" onclick="toggleSafety(this,'na')">N/A</button>
+            </div>
+          </div>
+          <div class="safety-row">
+            <div class="safety-label">Documentation</div>
+            <div class="safety-toggle">
+              <button class="toggle-btn ok active" onclick="toggleSafety(this,'ok')">OK</button>
+              <button class="toggle-btn nok" onclick="toggleSafety(this,'nok')">NOK</button>
+              <button class="toggle-btn na" onclick="toggleSafety(this,'na')">N/A</button>
+            </div>
+          </div>
+          <div class="safety-row">
+            <div class="safety-label">Cargo check</div>
+            <div class="safety-toggle">
+              <button class="toggle-btn ok active" onclick="toggleSafety(this,'ok')">OK</button>
+              <button class="toggle-btn nok" onclick="toggleSafety(this,'nok')">NOK</button>
+              <button class="toggle-btn na" onclick="toggleSafety(this,'na')">N/A</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DOCUMENTACIÓN -->
+      <div class="section-block">
+        <div class="section-block-header" onclick="toggleSection(this)">
+          <div class="section-block-title">
+            <div class="section-status-dot dot-incomplete"></div>
+            📎 Documentación
+          </div>
+          <div class="chevron">▼</div>
+        </div>
+        <div class="section-block-body">
+
+          <div class="doc-row">
+            <div class="doc-label">
+              <div class="doc-check checked" onclick="toggleDoc(this)">✓</div>
+              NOTOC → OCC
+            </div>
+            <button class="doc-camera-btn uploaded" onclick="showToast('📷 Imagen ya adjunta · 14:12z')">📷 Enviada</button>
+          </div>
+
+          <div class="doc-row">
+            <div class="doc-label">
+              <div class="doc-check checked" onclick="toggleDoc(this)">✓</div>
+              NOTOC → Ground Reports
+            </div>
+            <button class="doc-camera-btn uploaded" onclick="showToast('📷 Imagen ya adjunta · 14:12z')">📷 Enviada</button>
+          </div>
+
+          <div class="doc-row">
+            <div class="doc-label">
+              <div class="doc-check" onclick="toggleDoc(this)"></div>
+              Albarán combustible
+            </div>
+            <button class="doc-camera-btn" onclick="fakeCapture(this, 'Albarán combustible')">📷 Foto</button>
+          </div>
+
+          <div class="doc-row">
+            <div class="doc-label">
+              <div class="doc-check checked" onclick="toggleDoc(this)">✓</div>
+              OFP firmado
+            </div>
+            <button class="doc-camera-btn uploaded" onclick="showToast('📷 Imagen ya adjunta · 13:58z')">📷 Enviada</button>
+          </div>
+
+          <div class="doc-row">
+            <div class="doc-label">
+              <div class="doc-check checked" onclick="toggleDoc(this)">✓</div>
+              LIR firmada
+            </div>
+            <button class="doc-camera-btn uploaded" onclick="showToast('📷 Imagen ya adjunta · 14:02z')">📷 Enviada</button>
+          </div>
+
+          <div class="doc-row">
+            <div class="doc-label">
+              <div class="doc-check checked" onclick="toggleDoc(this)">✓</div>
+              Loadsheet firmada
+            </div>
+            <button class="doc-camera-btn uploaded" onclick="showToast('📷 Imagen ya adjunta · 14:05z')">📷 Enviada</button>
+          </div>
+
+          <div style="margin-top:12px; padding:10px 12px; background:rgba(63,185,80,0.06); border:1px solid rgba(63,185,80,0.15); border-radius:8px; font-size:12px; color:var(--text2);">
+            📡 Las fotos se envían en tiempo real al OCC Madrid y HCC
+          </div>
+
+        </div>
+      </div>
+
+      <div style="height: 10px;"></div>
+    </div>
+
+    <div class="send-bar">
+      <div class="send-status-row">
+        <span>Estado del FHR</span>
+        <span class="send-count missing" id="send-status-text">1 campo pendiente</span>
+      </div>
+      <button class="btn-report" onclick="goTo('screen-report')">
+        📋 &nbsp;Generar Reporte
+      </button>
+      <button class="btn-send" id="btn-send" onclick="sendFHR()">
+        ✈ &nbsp;Enviar FHR
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══════════ SCREEN: REPORT ═══════════ -->
+  <div class="screen" id="screen-report">
+    <div class="top-nav">
+      <div class="nav-back" onclick="goTo('screen-close')">←</div>
+      <div class="nav-title">
+        <div class="nav-title-main">Reporte FHR</div>
+        <div class="nav-title-sub">Resumen de escala</div>
+      </div>
+      <div class="nav-badge badge-report">PREVIEW</div>
+    </div>
+
+    <div class="scroll-area" id="report-content">
+      <!-- Generated dynamically -->
+    </div>
+
+    <div class="send-bar">
+      <button class="btn-print" onclick="showToast('📤 Reporte enviado al HCC · ' + getUTCTime() + 'z')">
+        📤 &nbsp;Enviar reporte al HCC
+      </button>
+      <button class="btn-secondary" style="margin-top:0;" onclick="goTo('screen-close')">
+        ← Volver al cierre
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── STATE ──
+  const notes = {};
+  const safetyNOK = [];
+
+  // ── CLOCK ──
+  function getUTCTime() {
+    const now = new Date();
+    return String(now.getUTCHours()).padStart(2,'0') + ':' + String(now.getUTCMinutes()).padStart(2,'0');
+  }
+
+  function updateClock() {
+    const t = getUTCTime();
+    const el = document.getElementById('clock');
+    const sync = document.getElementById('sync-time');
+    if (el) el.textContent = t;
+    if (sync) sync.textContent = t;
+  }
+  updateClock();
+  setInterval(updateClock, 10000);
+
+  // ── TIMER ──
+  let seconds = 4472;
+  function updateTimer() {
+    seconds++;
+    const h = String(Math.floor(seconds/3600)).padStart(2,'0');
+    const m = String(Math.floor((seconds%3600)/60)).padStart(2,'0');
+    const s = String(seconds%60).padStart(2,'0');
+    const el = document.getElementById('timer');
+    if (el) el.textContent = h + ':' + m + ':' + s;
+  }
+  setInterval(updateTimer, 1000);
+
+  // ── NAVIGATION ──
+  function goTo(screenId) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(screenId).classList.add('active');
+    const el = document.getElementById(screenId);
+    if (el) {
+      const scroll = el.querySelector('.scroll-area');
+      if (scroll) scroll.scrollTop = 0;
+    }
+    if (screenId === 'screen-report') buildReport();
+  }
+
+  // ── PROCESS — start/stop ──
+  function startProcess(id, btn) {
+    const item = document.getElementById(id);
+    const t = getUTCTime() + 'z';
+    item.classList.remove('pending');
+    item.classList.add('running');
+    item.querySelector('.process-times').textContent = t + ' → en curso';
+    btn.outerHTML = '<button class="btn-stop" onclick="stopProcess(\'' + id + '\', this)">FIN</button>';
+    showToast('⏱ ' + item.querySelector('.process-name').textContent + ' iniciado · ' + t);
+  }
+
+  function stopProcess(id, btn) {
+    const item = document.getElementById(id);
+    const t = getUTCTime() + 'z';
+    const prev = item.querySelector('.process-times').textContent.replace(' → en curso', '');
+    item.classList.remove('running');
+    item.classList.add('done');
+    item.querySelector('.process-times').textContent = prev + ' → ' + t;
+    btn.outerHTML = '<div class="process-check">✓</div>';
+    showToast('✅ ' + item.querySelector('.process-name').textContent + ' completado · ' + t);
+  }
+
+  // ── PROCESS — end-only (Disembarkation, Offloading) ──
+  function endOnlyProcess(id, btn) {
+    const item = document.getElementById(id);
+    const t = getUTCTime() + 'z';
+    item.classList.remove('endonly');
+    item.classList.add('done');
+    item.querySelector('.process-times').textContent = 'Finalizado · ' + t + ' — avión disponible';
+    btn.outerHTML = '<div class="process-check">✓</div>';
+    showToast('✅ ' + item.querySelector('.process-name').textContent + ' · fin ' + t);
+  }
+
+  // ── NOTES ──
+  function toggleNote(procId) {
+    const area = document.getElementById('note-' + procId);
+    area.classList.toggle('open');
+  }
+
+  function saveNote(procId, value) {
+    notes[procId] = value.trim();
+    const btn = document.getElementById('note-btn-' + procId);
+    const item = document.getElementById(procId);
+    if (value.trim()) {
+      btn.classList.add('has-note');
+      item.classList.add('has-note');
+    } else {
+      btn.classList.remove('has-note');
+      item.classList.remove('has-note');
+    }
+  }
+
+  // ── WATER ──
+  function setWater(val, btn) {
+    const detail = document.getElementById('water-detail');
+    const times = document.getElementById('water-times');
+    btn.closest('.water-toggle').querySelectorAll('.water-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    if (val === 'yes') {
+      detail.style.display = 'block';
+      times.textContent = 'Realizado — confirmar nivel';
+    } else {
+      detail.style.display = 'none';
+      times.textContent = 'No realizado · ' + getUTCTime() + 'z';
+      const item = document.getElementById('proc-water');
+      item.classList.remove('pending');
+      item.classList.add('done');
+    }
+  }
+
+  function setLevel(level, btn) {
+    btn.closest('.water-level').querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const times = document.getElementById('water-times');
+    times.textContent = 'Nivel: ' + level + ' · ' + getUTCTime() + 'z';
+    const item = document.getElementById('proc-water');
+    item.classList.remove('pending');
+    item.classList.add('done');
+    showToast('💧 Aguas potables: ' + level + ' confirmado');
+  }
+
+  // ── SECTION TOGGLE ──
+  function toggleSection(header) {
+    const body = header.nextElementSibling;
+    const chevron = header.querySelector('.chevron');
+    body.classList.toggle('open');
+    chevron.classList.toggle('open');
+  }
+
+  // ── SAFETY TOGGLE ──
+  function toggleSafety(btn, type) {
+    const row = btn.closest('.safety-toggle');
+    const label = btn.closest('.safety-row').querySelector('.safety-label').textContent;
+    row.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const idx = safetyNOK.indexOf(label);
+    if (type === 'nok') {
+      if (idx === -1) safetyNOK.push(label);
+      showToast('🚨 Safety NOK registrado: ' + label);
+    } else {
+      if (idx > -1) safetyNOK.splice(idx, 1);
+    }
+  }
+
+  // ── DOC TOGGLE ──
+  function toggleDoc(check) {
+    check.classList.toggle('checked');
+    check.textContent = check.classList.contains('checked') ? '✓' : '';
+  }
+
+  // ── FAKE CAMERA CAPTURE ──
+  function fakeCapture(btn, docName) {
+    showToast('📷 Capturando ' + docName + '...');
+    setTimeout(() => {
+      btn.classList.add('uploaded');
+      btn.textContent = '📷 Enviada';
+      btn.onclick = function() { showToast('📷 Imagen adjunta · enviada al OCC'); };
+      const docRow = btn.closest('.doc-row');
+      const check = docRow.querySelector('.doc-check');
+      if (check && !check.classList.contains('checked')) {
+        check.classList.add('checked');
+        check.textContent = '✓';
+      }
+      showToast('✅ ' + docName + ' enviado al OCC en tiempo real');
+    }, 1200);
+  }
+
+  // ── REPORT BUILDER ──
+  // ── PRE-BOARDING ──
+  function setPreboard(val) {
+    const yes = document.getElementById('preboard-yes');
+    const no = document.getElementById('preboard-no');
+    yes.classList.remove('active'); no.classList.remove('active');
+    if (val === 'yes') { yes.classList.add('active'); showToast('✅ Pre-boarding confirmado'); }
+    else { no.classList.add('active'); showToast('Pre-boarding: No realizado'); }
+  }
+
+  function updateBoardingTimes() {
+    const t = document.getElementById('board-ok-time').value;
+    if (t) showToast('✅ OK Boarding · ' + t + 'z');
+  }
+
+  // ── MANIFEST ──
+  function fakeManifest() {
+    showToast('📎 Adjuntando manifest...');
+    setTimeout(() => {
+      document.getElementById('manifest-status').style.display = 'block';
+      const btn = document.getElementById('manifest-btn');
+      btn.classList.add('uploaded');
+      btn.innerHTML = '📎 &nbsp;Manifest adjunto ✓';
+      showToast('✅ Cargo manifest adjunto al FHR');
+    }, 1000);
+  }
+
+  // ── OFFLOADS ──
+  const offloads = [];
+
+  function addOffload() {
+    const id = Date.now();
+    offloads.push({ id, uld: '', weight: '', reason: '' });
+    renderOffloads();
+  }
+
+  function removeOffload(id) {
+    const idx = offloads.findIndex(o => o.id === id);
+    if (idx > -1) offloads.splice(idx, 1);
+    renderOffloads();
+  }
+
+  function renderOffloads() {
+    const list = document.getElementById('offload-list');
+    if (!list) return;
+    if (offloads.length === 0) { list.innerHTML = ''; return; }
+    list.innerHTML = offloads.map(o => `
+      <div style="background:var(--surface2); border:1px solid rgba(248,81,73,0.2); border-radius:8px; padding:10px 12px; margin-bottom:8px;">
+        <div style="display:grid; grid-template-columns:1fr 80px; gap:8px; margin-bottom:8px;">
+          <input class="form-input" style="padding:8px 10px; font-size:13px;" type="text" placeholder="ULD / Nº"
+            value="${o.uld}" oninput="offloads.find(x=>x.id===${o.id}).uld=this.value">
+          <input class="form-input" style="padding:8px 10px; font-size:13px; font-family:var(--mono);" type="number" placeholder="kg"
+            value="${o.weight}" oninput="offloads.find(x=>x.id===${o.id}).weight=this.value">
+        </div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <input class="form-input" style="padding:8px 10px; font-size:13px; flex:1;" type="text" placeholder="Motivo del offload"
+            value="${o.reason}" oninput="offloads.find(x=>x.id===${o.id}).reason=this.value">
+          <button onclick="removeOffload(${o.id})" style="background:rgba(248,81,73,0.15); border:1px solid rgba(248,81,73,0.3); border-radius:6px; padding:8px 10px; color:var(--red); font-size:13px; cursor:pointer; flex-shrink:0;">✕</button>
+        </div>
+      </div>`).join('');
+  }
+
+  // ── BUILD REPORT ──
+  function buildReport() {
+    const now = getUTCTime();
+    const pic = document.getElementById('field-pic') ? document.getElementById('field-pic').value || '—' : '—';
+    const purser = document.getElementById('field-purser') ? document.getElementById('field-purser').value || '—' : '—';
+    const okBoard = document.getElementById('board-ok-time') ? document.getElementById('board-ok-time').value : '';
+    const payEst = document.getElementById('payload-est') ? document.getElementById('payload-est').value : '';
+    const payFin = document.getElementById('payload-final') ? document.getElementById('payload-final').value : '';
+    const preboard = document.getElementById('preboard-yes') ? document.getElementById('preboard-yes').classList.contains('active') ? 'Sí' : (document.getElementById('preboard-no').classList.contains('active') ? 'No' : '—') : '—';
+
+    let html = '';
+
+    html += `<div class="report-flight-header">
+      <div class="report-flight-num">ETD 083 · AUH → FCO</div>
+      <div class="report-flight-sub">EC-NBN · A332 · Stand B22 · Dispatcher: Sergio</div>
+      <div style="margin-top:6px; font-size:12px; color:var(--text2); font-family:var(--mono);">
+        PIC: ${pic} &nbsp;·&nbsp; Sobrecargo: ${purser}
+      </div>
+      <div class="report-timestamp">Reporte generado · ${now}z UTC</div>
+    </div>`;
+
+    // ─ SAFETY NOK (alta prioridad)
+    if (safetyNOK.length > 0) {
+      html += `<div class="report-block">
+        <div class="report-block-title">🚨 Safety NOK — Alta prioridad</div>`;
+      safetyNOK.forEach(item => {
+        html += `<div class="report-item">
+          <div class="report-item-label">${item}<span class="report-severity sev-high">NOK</span></div>
+          <div class="report-item-text">Item marcado como NOK durante el cierre del FHR.</div>
+        </div>`;
+      });
+      html += `</div>`;
+    }
+
+    // ─ RETRASOS
+    html += `<div class="report-block">
+      <div class="report-block-title">⏱ Retrasos</div>
+      <div class="report-item">
+        <div class="report-item-label">Código 91R — Espera conexiones<span class="report-severity sev-med">+9 MIN</span></div>
+        <div class="report-item-text">STD 17:00z · ATD 17:09z · Retraso de 9 minutos.</div>
+      </div>
+    </div>`;
+
+    // ─ TIEMPOS DE PROCESOS
+    const procDefs = [
+      { id: 'proc-disem',  label: 'Disembarkation' },
+      { id: 'proc-offload',label: 'Offloading' },
+      { id: 'proc-crew',   label: 'Crew Arrival' },
+      { id: 'proc-crewob', label: 'Crew On Board' },
+      { id: 'proc-clean',  label: 'Cleaning' },
+      { id: 'proc-fuel',   label: 'Fuelling' },
+      { id: 'proc-cater',  label: 'Catering' },
+      { id: 'proc-water',  label: 'Aguas Potables' },
+      { id: 'proc-board',  label: 'Boarding' },
+      { id: 'proc-load',   label: 'Loading' },
+      { id: 'proc-lir',    label: 'LIR' },
+      { id: 'proc-ls',     label: 'Loadsheet' }
+    ];
+
+    html += `<div class="report-block"><div class="report-block-title">⏱ Tiempos de procesos</div>`;
+    procDefs.forEach(p => {
+      const el = document.getElementById(p.id);
+      const timesEl = el ? el.querySelector('.process-times') : null;
+      const timeText = timesEl ? timesEl.textContent : '—';
+      let extra = '';
+      if (p.id === 'proc-lir') {
+        const em = document.getElementById('lir-emitida') ? document.getElementById('lir-emitida').value : '';
+        const fi = document.getElementById('lir-firmada') ? document.getElementById('lir-firmada').value : '';
+        if (em || fi) extra = ` · Emitida: ${em || '—'}z · Firmada: ${fi || '—'}z`;
+      }
+      if (p.id === 'proc-ls') {
+        const em = document.getElementById('ls-emitida') ? document.getElementById('ls-emitida').value : '';
+        const fi = document.getElementById('ls-firmada') ? document.getElementById('ls-firmada').value : '';
+        if (em || fi) extra = ` · Emitida: ${em || '—'}z · Firmada: ${fi || '—'}z`;
+      }
+      if (p.id === 'proc-board' && okBoard) {
+        extra = ` · OK Boarding: ${okBoard}z · Pre-boarding: ${preboard}`;
+      }
+      if (p.id === 'proc-water') {
+        const liters = document.getElementById('water-liters') ? document.getElementById('water-liters').value : '';
+        if (liters) extra = ` · ${liters} litros`;
+      }
+      html += `<div class="report-item">
+        <div class="report-item-label">${p.label}</div>
+        <div class="report-item-text" style="font-family:var(--mono); font-size:12px;">${timeText}${extra}</div>
+      </div>`;
+    });
+    html += `</div>`;
+
+    // ─ NOTAS DE PROCESOS
+    const processNames = {
+      'proc-disem': 'Disembarkation', 'proc-offload': 'Offloading',
+      'proc-crew': 'Crew Arrival', 'proc-crewob': 'Crew On Board',
+      'proc-clean': 'Cleaning', 'proc-fuel': 'Fuelling',
+      'proc-cater': 'Catering', 'proc-water': 'Aguas Potables',
+      'proc-board': 'Boarding', 'proc-load': 'Loading',
+      'proc-lir': 'LIR', 'proc-ls': 'Loadsheet'
+    };
+
+    const hasNotes = Object.keys(notes).some(k => notes[k]);
+    if (hasNotes) {
+      html += `<div class="report-block"><div class="report-block-title">📝 Notas de procesos</div>`;
+      Object.keys(processNames).forEach(id => {
+        if (notes[id]) {
+          html += `<div class="report-item">
+            <div class="report-item-label">${processNames[id]}<span class="report-severity sev-info">NOTA</span></div>
+            <div class="report-item-text">${notes[id]}</div>
+          </div>`;
+        }
+      });
+      html += `</div>`;
+    }
+
+    // ─ Sin incidencias
+    if (safetyNOK.length === 0 && !hasNotes && offloads.length === 0) {
+      html += `<div class="report-block"><div class="report-empty">✅ Sin incidencias registradas.<br><br>Todos los safety aspects OK · Sin notas de procesos.</div></div>`;
+    }
+
+    // ─ RESUMEN ESCALA
+    html += `<div class="report-block">
+      <div class="report-block-title">📊 Resumen escala</div>
+      <div class="report-item">
+        <div class="report-item-label">Payload</div>
+        <div class="report-item-text">Estimado: ${payEst ? payEst + ' kg' : '—'} · Final: ${payFin ? payFin + ' kg' : '—'}</div>
+      </div>
+      <div class="report-item">
+        <div class="report-item-label">Pasajeros</div>
+        <div class="report-item-text">268 PAX total · 253 ADT · 12 CHD · 3 INF · 2 no-shows · 6 WCHR</div>
+      </div>
+      <div class="report-item">
+        <div class="report-item-label">Combustible</div>
+        <div class="report-item-text">Uplift 41.200 kg (OFP 42.800 kg) · Recibo AUH-2026-08847</div>
+      </div>
+      <div class="report-item">
+        <div class="report-item-label">Documentación</div>
+        <div class="report-item-text">NOTOC, OFP, LIR y Loadsheet enviados al OCC. Albarán combustible pendiente.</div>
+      </div>
+    </div>
+
+    ${offloads.length > 0 ? `<div class="report-block">
+      <div class="report-block-title">📤 Offloads</div>
+      ${offloads.map((o, i) => `<div class="report-item">
+        <div class="report-item-label">Offload ${i+1} — ${o.uld || 'Sin ULD'}<span class="report-severity sev-med">${o.weight ? o.weight + ' kg' : '—'}</span></div>
+        <div class="report-item-text">Motivo: ${o.reason || '—'}</div>
+      </div>`).join('')}
+    </div>` : ''}
+
+    <div style="height:10px;"></div>`;
+
+    document.getElementById('report-content').innerHTML = html;
+  }
+
+  // ── TOAST ──
+  let toastTimer;
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  // ── SEND FHR ──
+  const WEBHOOK_URL = 'https://default1316018c4b204b989d6021bda19c74.40.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/2ef39d2d9c57441aa31d2e20e007f657/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=kF4v09iW6X0p0w7-Dj5l-8Fln6cjUteH_jnYmEXLlFI';
+
+  function getProcTime(procId) {
+    const el = document.getElementById(procId);
+    if (!el) return '';
+    const t = el.querySelector('.process-times');
+    return t ? t.textContent.trim() : '';
+  }
+
+  function sendFHR() {
+    const btn = document.getElementById('btn-send');
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Enviando…'; }
+
+    const reportEl = document.getElementById('report-content');
+    const reportHTML = reportEl ? reportEl.innerHTML : '';
+
+    const payload = {
+      vuelo:               (document.getElementById('form-vuelo')?.value || 'ETD083').toUpperCase(),
+      matricula:           (document.getElementById('form-matricula')?.value || 'EC-NBN').split('·')[0].trim(),
+      aerolinea:           document.getElementById('form-airline')?.value || 'Etihad Airways (ETD)',
+      origen:              (document.getElementById('form-origen')?.value || 'AUH').toUpperCase(),
+      destino:             (document.getElementById('form-destino')?.value || 'FCO').toUpperCase(),
+      pic:                 document.getElementById('field-pic')?.value || '',
+      sobrecargo:          document.getElementById('field-purser')?.value || '',
+      dispatcher:          document.getElementById('form-dispatcher')?.value || 'Sergio',
+      fecha:               new Date().toISOString(),
+      horaLlegada:         getProcTime('proc-disem'),
+      horaPartida:         getProcTime('proc-load'),
+      disembarkationFin:   document.getElementById('disem-times')?.textContent || '',
+      offloadingFin:       document.getElementById('offload-times')?.textContent || '',
+      crewArrivalInicio:   getProcTime('proc-crew'),
+      crewArrivalFin:      getProcTime('proc-crew'),
+      crewOnBoardInicio:   getProcTime('proc-crewob'),
+      crewOnBoardFin:      getProcTime('proc-crewob'),
+      cleaningInicio:      getProcTime('proc-clean'),
+      cleaningFin:         getProcTime('proc-clean'),
+      fuellingInicio:      getProcTime('proc-fuel'),
+      fuellingFin:         getProcTime('proc-fuel'),
+      cateringInicio:      getProcTime('proc-cater'),
+      cateringFin:         getProcTime('proc-cater'),
+      boardingPreboard:    document.getElementById('preboard-yes')?.classList.contains('active') ? 'SI' : 'NO',
+      boardingOkTime:      document.getElementById('board-ok-time')?.value || '',
+      boardingInicio:      getProcTime('proc-board'),
+      boardingFin:         getProcTime('proc-board'),
+      loadingInicio:       getProcTime('proc-load'),
+      loadingFin:          getProcTime('proc-load'),
+      lirEmitida:          document.getElementById('lir-emitida')?.value || '',
+      lirFirmada:          document.getElementById('lir-firmada')?.value || '',
+      loadsheetEmitida:    document.getElementById('ls-emitida')?.value || '',
+      loadsheetFirmada:    document.getElementById('ls-firmada')?.value || '',
+      aguasPotables:       getProcTime('proc-water') ? 'SI' : 'NO',
+      aguasLitros:         document.getElementById('water-liters')?.value || '',
+      safetyNOK:           safetyNOK.join(', '),
+      notas:               Object.entries(notes).map(([k,v]) => k + ': ' + v).join(' | '),
+      offloads:            offloads.map(o => [o.uld, o.weight+'kg', o.reason].filter(Boolean).join(' / ')).join(' · '),
+      reportHTML:          reportHTML,
+      estado:              'CERRADO'
+    };
+
+    fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(r => {
+      if (r.ok || r.status === 202) {
+        showToast('✅ FHR guardado en SharePoint · ' + getUTCTime() + 'z');
+        setTimeout(() => goTo('screen-home'), 1800);
+      } else {
+        throw new Error('HTTP ' + r.status);
+      }
+    })
+    .catch(err => {
+      console.error('sendFHR error:', err);
+      showToast('⚠️ Error al enviar — intenta de nuevo');
+      if (btn) { btn.disabled = false; btn.textContent = '✈ Enviar FHR'; }
+    });
+  }
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>FHR App — Wamos Air Ground Ops</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2333;
+    --surface3: #21262d;
+    --border: #30363d;
+    --border2: #21262d;
+    --amber: #f0883e;
+    --amber2: #ffa657;
+    --green: #3fb950;
+    --green2: #56d364;
+    --blue: #58a6ff;
+    --red: #f85149;
+    --yellow: #e3b341;
+    --purple: #bc8cff;
+    --slate: #8b949e;
+    --text: #e6edf3;
+    --text2: #b1bac4;
+    --text3: #6e7681;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { -webkit-tap-highlight-color: transparent; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+  }
+
+  .phone-wrapper {
+    width: 390px;
+    min-height: 844px;
+    background: var(--bg);
+    border-radius: 44px;
+    border: 2px solid var(--border);
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 80px rgba(240,136,62,0.08), 0 0 0 1px rgba(255,255,255,0.04);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 24px 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text2);
+    flex-shrink: 0;
+  }
+
+  .status-time { font-family: var(--mono); font-size: 13px; color: var(--text); }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; }
+  .dot-green { background: var(--green); }
+  .dot-amber { background: var(--amber); }
+
+  .screen { display: none; flex-direction: column; flex: 1; overflow: hidden; }
+  .screen.active { display: flex; }
+
+  .top-nav {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px 8px;
+    gap: 12px;
+    border-bottom: 1px solid var(--border2);
+    flex-shrink: 0;
+  }
+
+  .nav-back {
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--text2);
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .nav-back:active { background: var(--surface3); transform: scale(0.95); }
+
+  .nav-title { flex: 1; }
+  .nav-title-main { font-size: 15px; font-weight: 700; color: var(--text); }
+  .nav-title-sub { font-size: 11px; color: var(--slate); margin-top: 1px; font-family: var(--mono); }
+
+  .nav-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: var(--mono);
+    letter-spacing: 0.5px;
+  }
+
+  .badge-live { background: rgba(63,185,80,0.15); color: var(--green2); border: 1px solid rgba(63,185,80,0.3); }
+  .badge-new { background: rgba(88,166,255,0.12); color: var(--blue); border: 1px solid rgba(88,166,255,0.25); }
+  .badge-closing { background: rgba(240,136,62,0.12); color: var(--amber); border: 1px solid rgba(240,136,62,0.25); }
+  .badge-report { background: rgba(188,140,255,0.12); color: var(--purple); border: 1px solid rgba(188,140,255,0.25); }
+
+  .scroll-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 20px;
+    scroll-behavior: smooth;
+  }
+  .scroll-area::-webkit-scrollbar { width: 3px; }
+  .scroll-area::-webkit-scrollbar-track { background: transparent; }
+  .scroll-area::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .tab-bar {
+    display: flex;
+    border-top: 1px solid var(--border2);
+    background: var(--surface);
+    flex-shrink: 0;
+  }
+
+  .tab-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 4px 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+    gap: 4px;
+  }
+
+  .tab-item:active { opacity: 0.7; }
+  .tab-icon { font-size: 20px; line-height: 1; }
+  .tab-label { font-size: 10px; font-weight: 500; color: var(--slate); }
+  .tab-item.active .tab-label { color: var(--amber); }
+
+  /* ═══ HOME ═══ */
+  .home-header {
+    padding: 16px 20px 12px;
+    border-bottom: 1px solid var(--border2);
+    flex-shrink: 0;
+  }
+
+  .home-greeting { font-size: 12px; color: var(--slate); margin-bottom: 2px; }
+  .home-name { font-size: 22px; font-weight: 700; color: var(--text); }
+
+  .sync-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    font-size: 11px;
+    color: var(--green);
+    font-family: var(--mono);
+  }
+
+  .sync-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--slate);
+    margin-bottom: 10px;
+    margin-top: 20px;
+  }
+
+  .section-label:first-child { margin-top: 0; }
+
+  .fhr-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .fhr-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    border-radius: 3px 0 0 3px;
+  }
+
+  .fhr-card.status-live::before { background: var(--green); }
+  .fhr-card.status-draft::before { background: var(--amber); }
+  .fhr-card.status-sent::before { background: var(--slate); }
+  .fhr-card:active { background: var(--surface2); transform: scale(0.99); }
+
+  .fhr-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+  }
+
+  .fhr-flight { font-size: 16px; font-weight: 700; font-family: var(--mono); color: var(--text); }
+  .fhr-route { font-size: 12px; color: var(--slate); margin-top: 1px; }
+
+  .fhr-status {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-family: var(--mono);
+  }
+
+  .status-live .fhr-status { background: rgba(63,185,80,0.15); color: var(--green2); }
+  .status-draft .fhr-status { background: rgba(240,136,62,0.15); color: var(--amber2); }
+  .status-sent .fhr-status { background: rgba(139,148,158,0.15); color: var(--slate); }
+
+  .fhr-card-bottom {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+  }
+
+  .fhr-meta { font-size: 11px; color: var(--text3); display: flex; align-items: center; gap: 4px; }
+  .fhr-meta strong { color: var(--text2); font-weight: 600; }
+
+  .fhr-progress {
+    flex: 1;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .fhr-progress-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: var(--green);
+    transition: width 0.3s;
+  }
+
+  .btn-new-fhr {
+    background: var(--amber);
+    color: #000;
+    border: none;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.15s;
+    margin-bottom: 16px;
+  }
+
+  .btn-new-fhr:active { transform: scale(0.98); background: var(--amber2); }
+
+  /* ═══ CREATE FHR ═══ */
+  .form-group { margin-bottom: 16px; }
+
+  .form-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--slate);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .form-input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    font-family: var(--mono);
+    outline: none;
+    transition: border-color 0.15s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .form-input:focus { border-color: var(--amber); }
+
+  .form-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238b949e' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+  }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+  .form-divider {
+    height: 1px;
+    background: var(--border2);
+    margin: 20px 0;
+  }
+
+  .form-section-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--amber);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-primary {
+    background: var(--amber);
+    color: #000;
+    border: none;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.15s;
+    margin-top: 8px;
+  }
+
+  .btn-primary:active { transform: scale(0.98); }
+
+  .btn-secondary {
+    background: var(--surface2);
+    color: var(--text2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.15s;
+    margin-top: 8px;
+  }
+
+  /* ═══ ESCALA ACTIVA ═══ */
+  .escala-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border2);
+    padding: 14px 20px;
+    flex-shrink: 0;
+  }
+
+  .escala-flight-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .timer-display {
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--green);
+    text-align: right;
+    line-height: 1;
+  }
+
+  .timer-label { font-size: 10px; color: var(--slate); text-align: right; margin-top: 2px; }
+
+  .escala-progress-bar {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .escala-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--amber), var(--green));
+    border-radius: 2px;
+    transition: width 0.5s;
+    width: 45%;
+  }
+
+  /* PROCESS ITEMS */
+  .process-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    transition: all 0.15s;
+    overflow: hidden;
+  }
+
+  .process-main {
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+  }
+
+  .process-item.running { border-color: var(--green); background: rgba(63,185,80,0.04); }
+  .process-item.done { opacity: 0.75; }
+  .process-item.has-note { border-color: var(--amber) !important; }
+
+  .process-icon-wrap {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .process-item.pending .process-icon-wrap { background: var(--surface2); }
+  .process-item.running .process-icon-wrap { background: rgba(63,185,80,0.15); }
+  .process-item.done .process-icon-wrap { background: rgba(139,148,158,0.1); }
+  .process-item.endonly .process-icon-wrap { background: rgba(88,166,255,0.1); }
+
+  .process-info { flex: 1; min-width: 0; }
+  .process-name { font-size: 14px; font-weight: 600; color: var(--text); }
+  .process-times { font-size: 11px; color: var(--slate); margin-top: 3px; font-family: var(--mono); }
+
+  .process-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .btn-note {
+    width: 30px; height: 30px;
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--slate);
+    font-size: 14px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+
+  .btn-note.has-note { background: rgba(240,136,62,0.15); border-color: var(--amber); color: var(--amber); }
+  .btn-note:active { transform: scale(0.9); }
+
+  .btn-start {
+    background: var(--green);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--mono);
+  }
+
+  .btn-start:active { transform: scale(0.95); }
+
+  .btn-stop {
+    background: var(--red);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--mono);
+  }
+
+  .btn-end-only {
+    background: rgba(88,166,255,0.15);
+    color: var(--blue);
+    border: 1px solid rgba(88,166,255,0.3);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--mono);
+  }
+
+  .btn-end-only:active { transform: scale(0.95); }
+
+  .process-check {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--green);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    color: #000;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .note-area {
+    display: none;
+    padding: 0 16px 14px;
+    border-top: 1px solid var(--border2);
+  }
+
+  .note-area.open { display: block; padding-top: 12px; }
+
+  .note-textarea {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 13px;
+    color: var(--text2);
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    resize: none;
+    min-height: 70px;
+    transition: border-color 0.15s;
+    line-height: 1.5;
+  }
+
+  .note-textarea:focus { border-color: var(--amber); }
+  .note-textarea::placeholder { color: var(--text3); }
+
+  /* WATER PROCESS — special */
+  .water-block {
+    padding: 0 16px 14px;
+    border-top: 1px solid var(--border2);
+  }
+
+  .water-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-top: 12px;
+    flex-wrap: wrap;
+  }
+
+  .water-label { font-size: 12px; color: var(--slate); flex-shrink: 0; }
+
+  .water-toggle {
+    display: flex;
+    gap: 4px;
+  }
+
+  .water-btn {
+    padding: 5px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    background: var(--surface2);
+    color: var(--slate);
+    transition: all 0.15s;
+    font-family: var(--mono);
+  }
+
+  .water-btn.yes.active { background: rgba(63,185,80,0.2); color: var(--green2); border-color: var(--green); }
+  .water-btn.no.active { background: rgba(248,81,73,0.2); color: var(--red); border-color: var(--red); }
+
+  .water-level {
+    display: flex;
+    gap: 4px;
+    margin-top: 10px;
+  }
+
+  .level-btn {
+    flex: 1;
+    padding: 6px 4px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    background: var(--surface2);
+    color: var(--slate);
+    transition: all 0.15s;
+    font-family: var(--mono);
+    text-align: center;
+  }
+
+  .level-btn.active { background: rgba(88,166,255,0.2); color: var(--blue); border-color: var(--blue); }
+
+  .water-liters-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .water-liters-input {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: var(--mono);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    outline: none;
+    width: 100px;
+    transition: border-color 0.15s;
+  }
+
+  .water-liters-input:focus { border-color: var(--amber); }
+
+  /* ═══ CLOSE FHR ═══ */
+  .section-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+
+  .section-block-header {
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    background: var(--surface);
+    transition: background 0.15s;
+  }
+
+  .section-block-header:active { background: var(--surface2); }
+
+  .section-block-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .section-status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .dot-complete { background: var(--green); }
+  .dot-incomplete { background: var(--amber); }
+  .dot-required { background: var(--red); }
+  .dot-empty { background: var(--border); }
+
+  .section-block-body {
+    padding: 0 16px 16px;
+    border-top: 1px solid var(--border2);
+    display: none;
+  }
+
+  .section-block-body.open { display: block; padding-top: 16px; }
+  .chevron { color: var(--slate); transition: transform 0.2s; font-size: 12px; }
+  .chevron.open { transform: rotate(180deg); }
+
+  .safety-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border2);
+  }
+
+  .safety-row:last-child { border-bottom: none; }
+  .safety-label { font-size: 13px; color: var(--text2); }
+
+  .safety-toggle { display: flex; gap: 4px; }
+
+  .toggle-btn {
+    padding: 5px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    background: var(--surface2);
+    color: var(--slate);
+    transition: all 0.15s;
+    font-family: var(--mono);
+  }
+
+  .toggle-btn.ok.active { background: rgba(63,185,80,0.2); color: var(--green2); border-color: var(--green); }
+  .toggle-btn.nok.active { background: rgba(248,81,73,0.2); color: var(--red); border-color: var(--red); }
+  .toggle-btn.na.active { background: rgba(139,148,158,0.15); color: var(--slate); border-color: var(--slate); }
+
+  .doc-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border2);
+    cursor: pointer;
+  }
+
+  .doc-row:last-child { border-bottom: none; }
+
+  .doc-label { font-size: 13px; color: var(--text2); display: flex; align-items: center; gap: 8px; }
+
+  .doc-check {
+    width: 20px; height: 20px;
+    border-radius: 6px;
+    border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  .doc-check.checked {
+    background: var(--green);
+    border-color: var(--green);
+    color: #000;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .doc-camera-btn {
+    background: rgba(88,166,255,0.1);
+    border: 1px solid rgba(88,166,255,0.25);
+    border-radius: 7px;
+    padding: 5px 10px;
+    font-size: 12px;
+    color: var(--blue);
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+
+  .doc-camera-btn.uploaded {
+    background: rgba(63,185,80,0.1);
+    border-color: rgba(63,185,80,0.3);
+    color: var(--green2);
+  }
+
+  .doc-camera-btn:active { transform: scale(0.95); }
+
+  /* SEND BAR */
+  .send-bar {
+    padding: 16px 20px;
+    border-top: 1px solid var(--border2);
+    background: var(--surface);
+    flex-shrink: 0;
+  }
+
+  .send-status-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 12px;
+    color: var(--slate);
+  }
+
+  .send-count { font-family: var(--mono); font-weight: 600; }
+  .send-count.all-ok { color: var(--green); }
+  .send-count.missing { color: var(--red); }
+
+  .btn-send {
+    width: 100%;
+    background: var(--amber);
+    border: none;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #000;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.15s;
+  }
+
+  .btn-send:active { transform: scale(0.98); }
+  .btn-send.disabled { background: var(--surface3); color: var(--slate); cursor: not-allowed; }
+
+  .btn-report {
+    width: 100%;
+    background: rgba(188,140,255,0.12);
+    border: 1px solid rgba(188,140,255,0.3);
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--purple);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.15s;
+    margin-bottom: 10px;
+  }
+
+  .btn-report:active { transform: scale(0.98); }
+
+  /* NUM GRID */
+  .num-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .num-field {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+
+  .num-field-label { font-size: 10px; color: var(--slate); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .num-field-input {
+    background: none;
+    border: none;
+    outline: none;
+    font-family: var(--mono);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    width: 100%;
+  }
+
+  .info-banner {
+    background: rgba(88,166,255,0.08);
+    border: 1px solid rgba(88,166,255,0.2);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 12px;
+    color: var(--text2);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .delay-row {
+    background: rgba(248,81,73,0.06);
+    border: 1px solid rgba(248,81,73,0.2);
+    border-radius: 8px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .delay-code { font-family: var(--mono); font-size: 14px; font-weight: 700; color: var(--red); }
+  .delay-time { font-family: var(--mono); font-size: 13px; color: var(--text2); }
+  .delay-resp { font-size: 11px; color: var(--slate); }
+
+  .incident-btn {
+    width: 100%;
+    background: rgba(248,81,73,0.08);
+    border: 1px solid rgba(248,81,73,0.25);
+    border-radius: 10px;
+    padding: 14px;
+    color: var(--red);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.15s;
+    margin-bottom: 8px;
+  }
+
+  .close-fhr-btn {
+    width: 100%;
+    background: var(--amber);
+    border: none;
+    border-radius: 12px;
+    padding: 16px;
+    color: #000;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  /* ═══ REPORT SCREEN ═══ */
+  .report-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+
+  .report-block-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--slate);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .report-item {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border2);
+    font-size: 13px;
+  }
+
+  .report-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+  .report-item-label {
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 3px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .report-item-text { color: var(--text2); line-height: 1.5; }
+
+  .report-severity {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 8px;
+    font-family: var(--mono);
+  }
+
+  .sev-high { background: rgba(248,81,73,0.2); color: var(--red); }
+  .sev-med { background: rgba(240,136,62,0.2); color: var(--amber); }
+  .sev-info { background: rgba(139,148,158,0.15); color: var(--slate); }
+
+  .report-flight-header {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+    font-family: var(--mono);
+  }
+
+  .report-flight-num { font-size: 18px; font-weight: 700; color: var(--text); }
+  .report-flight-sub { font-size: 12px; color: var(--slate); margin-top: 4px; }
+  .report-timestamp { font-size: 11px; color: var(--text3); margin-top: 6px; }
+
+  .btn-print {
+    width: 100%;
+    background: var(--amber);
+    border: none;
+    border-radius: 12px;
+    padding: 15px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #000;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.15s;
+    margin-bottom: 10px;
+  }
+
+  .btn-print:active { transform: scale(0.98); }
+
+  .report-empty {
+    text-align: center;
+    padding: 20px;
+    color: var(--text3);
+    font-size: 13px;
+  }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    transition: all 0.3s;
+    white-space: nowrap;
+    pointer-events: none;
+    max-width: 350px;
+  }
+
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="phone-wrapper" id="app">
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <div class="status-time" id="clock">14:32</div>
+    <div class="status-icons">
+      <div class="status-dot dot-green"></div>
+      <span style="font-size:11px; color: var(--green); font-family: var(--mono);">● ONLINE</span>
+    </div>
+  </div>
+
+  <!-- ═══════════ SCREEN: HOME ═══════════ -->
+  <div class="screen active" id="screen-home">
+    <div class="home-header">
+      <div class="home-greeting">Buenas tardes,</div>
+      <div class="home-name">Sergio 👋</div>
+      <div class="sync-indicator">
+        <div class="sync-dot"></div>
+        Sincronizado · <span id="sync-time">14:32</span> UTC
+      </div>
+    </div>
+
+    <div class="scroll-area">
+      <button class="btn-new-fhr" onclick="goTo('screen-create')">
+        ✚ &nbsp;Nuevo FHR
+      </button>
+
+      <div class="section-label">En curso</div>
+
+      <div class="fhr-card status-live" onclick="goTo('screen-escala')">
+        <div class="fhr-card-top">
+          <div>
+            <div class="fhr-flight">ETD 083</div>
+            <div class="fhr-route">AUH → FCO · EC-NBN · A332</div>
+          </div>
+          <div class="fhr-status">EN TIERRA</div>
+        </div>
+        <div class="fhr-card-bottom">
+          <div class="fhr-meta">STD <strong>10:00z</strong></div>
+          <div class="fhr-meta">01h 14min en tierra</div>
+          <div class="fhr-progress">
+            <div class="fhr-progress-fill" style="width:65%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-label">Pendientes de cierre</div>
+
+      <div class="fhr-card status-draft" onclick="goTo('screen-close')">
+        <div class="fhr-card-top">
+          <div>
+            <div class="fhr-flight">SVA 2600</div>
+            <div class="fhr-route">JED → ORN · EC-NHM · A333</div>
+          </div>
+          <div class="fhr-status">BORRADOR</div>
+        </div>
+        <div class="fhr-card-bottom">
+          <div class="fhr-meta">Cerrado <strong>12:15z</strong></div>
+          <div class="fhr-meta">⚠ 2 campos pendientes</div>
+          <div class="fhr-progress">
+            <div class="fhr-progress-fill" style="width:80%; background: var(--amber)"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-label">Enviados hoy</div>
+
+      <div class="fhr-card status-sent">
+        <div class="fhr-card-top">
+          <div>
+            <div class="fhr-flight">ETD 084</div>
+            <div class="fhr-route">FCO → AUH · EC-NBN · A332</div>
+          </div>
+          <div class="fhr-status">ENVIADO</div>
+        </div>
+        <div class="fhr-card-bottom">
+          <div class="fhr-meta">Enviado <strong>09:02z</strong></div>
+          <div class="fhr-meta">✓ Sin incidencias</div>
+          <div class="fhr-progress">
+            <div class="fhr-progress-fill" style="width:100%; background: var(--slate)"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fhr-card status-sent">
+        <div class="fhr-card-top">
+          <div>
+            <div class="fhr-flight">LAN 572</div>
+            <div class="fhr-route">SCL → BOG · EC-NCK · A332</div>
+          </div>
+          <div class="fhr-status">ENVIADO</div>
+        </div>
+        <div class="fhr-card-bottom">
+          <div class="fhr-meta">Enviado <strong>07:44z</strong></div>
+          <div class="fhr-meta">⚠ DL 32 · 12 min</div>
+          <div class="fhr-progress">
+            <div class="fhr-progress-fill" style="width:100%; background: var(--slate)"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="tab-bar">
+      <div class="tab-item active">
+        <div class="tab-icon">📋</div>
+        <div class="tab-label">FHRs</div>
+      </div>
+      <div class="tab-item">
+        <div class="tab-icon">⏱</div>
+        <div class="tab-label">Procesos</div>
+      </div>
+      <div class="tab-item">
+        <div class="tab-icon">🔔</div>
+        <div class="tab-label">Alertas</div>
+      </div>
+      <div class="tab-item">
+        <div class="tab-icon">👤</div>
+        <div class="tab-label">Perfil</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ SCREEN: CREATE FHR ═══════════ -->
+  <div class="screen" id="screen-create">
+    <div class="top-nav">
+      <div class="nav-back" onclick="goTo('screen-home')">←</div>
+      <div class="nav-title">
+        <div class="nav-title-main">Nuevo FHR</div>
+        <div class="nav-title-sub">Pre-escala</div>
+      </div>
+      <div class="nav-badge badge-new">FASE 1</div>
+    </div>
+
+    <div class="scroll-area">
+      <div class="form-section-title">✈ Identificación del vuelo</div>
+
+      <div class="form-group">
+        <label class="form-label">Airline cliente</label>
+        <select class="form-input form-select" id="form-airline">
+          <option>Etihad Airways (ETD)</option>
+          <option>LATAM Airlines (LAN)</option>
+          <option>Saudi Arabian (SVA)</option>
+          <option>Air New Zealand (ANZ)</option>
+          <option>Avianca (AVA)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Flight Nº</label>
+        <input class="form-input" type="text" placeholder="ej. ETD083" style="text-transform:uppercase" id="form-vuelo">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Origen (IATA)</label>
+          <input class="form-input" type="text" placeholder="AUH" maxlength="3" style="text-transform:uppercase" id="form-origen">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Destino (IATA)</label>
+          <input class="form-input" type="text" placeholder="FCO" maxlength="3" style="text-transform:uppercase" id="form-destino">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">STD (UTC)</label>
+          <input class="form-input" type="text" placeholder="00:00" id="form-std">
+        </div>
+        <div class="form-group">
+          <label class="form-label">STA (UTC)</label>
+          <input class="form-input" type="text" placeholder="00:00" id="form-sta">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Matrícula</label>
+        <select class="form-input form-select" id="form-matricula">
+          <option>EC-NBN · A332</option>
+          <option>EC-ODP · A332</option>
+          <option>EC-MAJ · A332</option>
+          <option>EC-NUI · A332</option>
+          <option>EC-NCK · A332</option>
+          <option>EC-NOF · A333</option>
+          <option>EC-NOG · A333</option>
+          <option>EC-NTX · A333</option>
+          <option>EC-ODQ · A333</option>
+          <option>EC-NHM · A333</option>
+          <option>EC-NYJ · A333</option>
+          <option>EC-ODR · A333</option>
+          <option>EC-OLG · A332</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Stand / Gate</label>
+          <input class="form-input" type="text" placeholder="B22">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Dispatcher</label>
+          <select class="form-input form-select" id="form-dispatcher">
+            <option>Sergio</option>
+            <option>Alberto</option>
+            <option>Adrián T</option>
+            <option>Boris</option>
+            <option>Derek</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-divider"></div>
+
+      <div class="form-section-title">🧑‍✈️ Tripulación</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">PIC (Comandante)</label>
+          <input class="form-input" type="text" placeholder="Apellido, Nombre" id="field-pic">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Sobrecargo</label>
+          <input class="form-input" type="text" placeholder="Apellido, Nombre" id="field-purser">
+        </div>
+      </div>
+
+      <div class="form-divider"></div>
+
+      <div class="form-section-title">🚌 Recogida tripulación</div>
+
+      <div class="form-group">
+        <label class="form-label">Empresa recogida</label>
+        <select class="form-input form-select">
+          <option>Etihad Ground</option>
+          <option>Proveedor externo</option>
+          <option>Cliente directo</option>
+          <option>Wamos propio</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Recogida hotel (UTC)</label>
+          <input class="form-input" type="text" placeholder="07:30">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Llegada terminal (UTC)</label>
+          <input class="form-input" type="text" placeholder="08:15">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Nº Tripulantes</label>
+          <input class="form-input" type="number" placeholder="6">
         </div>
         <div class="form-group">
           <label class="form-label">Vehículo / Matrícula</label>
